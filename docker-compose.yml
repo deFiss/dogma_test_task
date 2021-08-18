@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  dogma_test_task_backend:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    container_name: dogma_test_task_backend
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=dogma_test_task_db
+    depends_on:
+      - dogma_test_task_db
+    restart: unless-stopped
+
+  dogma_test_task_db:
+    image: postgres:13-alpine
+    container_name: dogma_test_task_db
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - ./.database/postgres/data:/var/lib/postgresql/data
